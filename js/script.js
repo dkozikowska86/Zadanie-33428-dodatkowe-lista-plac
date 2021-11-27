@@ -1,16 +1,8 @@
 console.log('Wypłaty pracowników');
 
-// Twoim zadaniem jest stworzenie skryptu, który będzie:
-// - Liczył wypłatę dla każdego pracownika i wpisywał je dla każdego pracownika do pola span.wyplata
-// Klient chce także, aby od razu doliczana była premia - jeżeli pracownik pracował powyżej 160 godzin, za każdą dodatkową godzinę otrzymuje podwójną stawkę.
-// - Zaznaczał czerwonym tłem osoby, które przepracowały mniej niż 100 godzin
-
-// Dodatkowo klient życzy sobie aby wyświetlała się lista trzech najlepszych pracowników - czyli takich, którzy przepracowali najwięcej godzin.
-
 let pracownicyDane = document.querySelectorAll('.employee');
-// console.log(pracownicyDane);
 
-const policzWyplate = () => {
+const policzWyplate = (event) => {
     let danePracownikow = [];
 
     pracownicyDane.forEach(element => {
@@ -31,97 +23,23 @@ const policzWyplate = () => {
         }
 
         danePracownikow.push({ name: osoba.innerHTML, time: Number(czas) });
-        // console.log(danePracownikow);
-        // let posortowaneDanePracownikow = danePracownikow[danePracownikow.lenght-1];
-        // console.leg(posortowaneDanePracownikow);
-        let sort = danePracownikow.sort((a, b) => (b.time < a.time ? -1 : Number(b.time> a.time)));
-        console.log(sort);
-
-        const sortKeyValues = (key, order = 'asc') => {
-            return function innerSort(a, b) {
-                const varA = a[key];
-                const varB = b[key];
-                let comparison = 0;
-
-                if (varA > varB) {
-                    comparison = 1;
-                } else if (varA < varB) {
-                    comparison = -1;
-                }
-                return (
-                    (order === 'desc') ? (comparison * -1) : comparison
-                );
-            }
-        }
     });
+
+    let sort = danePracownikow.sort((a, b) => (b.time < a.time ? -1 : 1));
+
+    najlepsi.innerHTML = '';
+
+    for (let i = 0; i < 3; i++) {
+        let li = document.createElement('li');
+        let ul = document.querySelector('.lista-najlepszych');
+        li.innerHTML = sort[i].name;
+        ul.appendChild(li);
+    }
+
+    if (najlepsi.children.length > 0) {
+        event.preventDefault();
+    }
 }
 
-
-
-
-    // function compareValues(key, order = 'asc') {
-    //     return function innerSort(a, b) {
-    //       if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-    //         // property doesn't exist on either object
-    //         return 0;
-    //       }
-
-    //       const varA = (typeof a[key] === 'string')
-    //         ? a[key].toUpperCase() : a[key];
-    //       const varB = (typeof b[key] === 'string')
-    //         ? b[key].toUpperCase() : b[key];
-
-    //       let comparison = 0;
-    //       if (varA > varB) {
-    //         comparison = 1;
-    //       } else if (varA < varB) {
-    //         comparison = -1;
-    //       }
-    //       return (
-    //         (order === 'desc') ? (comparison * -1) : comparison
-    //       );
-    //     };
-    //   }
-
-
-
-
-    // const bubbleSort = (arr) => {
-    //     for (let i = 0; i < arr.length; i++) {
-    //       for (let j = 0; j < arr.length - i - 1; j++) {
-    //         if (arr[j] > arr[j + 1]) {
-    //           const temp = arr[j + 1];
-    //           arr[j + 1] = arr[j];
-    //           arr[j] = temp;
-    //         }
-    //       }
-    //     }
-    //     return arr;
-    //   };
-
-    //   console.log(bubbleSort(mojaTablica));
-
-
-
-
-    // function compare(a, b) {
-    //     // Use toUpperCase() to ignore character casing
-    //     const bandA = a.band.toUpperCase();
-    //     const bandB = b.band.toUpperCase();
-
-    //     let comparison = 0;
-    //     if (bandA > bandB) {
-    //       comparison = 1;
-    //     } else if (bandA < bandB) {
-    //       comparison = -1;
-    //     }
-    //     return comparison;
-    //   }
-
-    //   singers.sort(compare);
-
-
-
-
-    let btnObliczWyplate = document.getElementById('oblicz');
-    btnObliczWyplate.addEventListener('click', policzWyplate);
+let btnObliczWyplate = document.getElementById('oblicz');
+btnObliczWyplate.addEventListener('click', policzWyplate);
